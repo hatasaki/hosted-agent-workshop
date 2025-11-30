@@ -1,0 +1,25 @@
+name: msft-learn-mcp-agent
+description: This Agent can access and search Microsoft Learn documentation using MCP (Model Context Protocol).
+metadata:
+  tags:
+    - Microsoft Foundry Hosted-Agent
+    - MCP
+    - Microsoft Agent Framework
+  authors:
+    - hatasaki
+template:
+  name: msft-learn-mcp-agent
+  kind: hosted
+  protocols:
+    - protocol: responses
+      version: v1
+  environment_variables:
+    - name: AZURE_AI_PROJECT_ENDPOINT
+      value: ${AZURE_AI_PROJECT_ENDPOINT}
+    - name: AZURE_AI_MODEL_DEPLOYMENT_NAME
+      value: "{{model}}"
+resources:
+  - kind: model
+    id: gpt-4o-mini
+    name: model
+  
