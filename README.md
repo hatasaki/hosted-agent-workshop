@@ -32,7 +32,7 @@ cd hosted-agent-workshop
     ```shell
     azd init --template Azure-Samples/ai-foundry-starter-basic
     ```
-    - input your unique project name when prompted.
+    - input your unique project name when prompted. Ex. `<username>-hosted-agent`
 
     This will perform a git clone
 
@@ -60,7 +60,8 @@ cd hosted-agent-workshop
     azd up
     ```
 
-5. Open Microsoft [Foundry portal](https://ai.azure.com) and test the agent:
+5. Open Microsoft [Foundry portal](https://ai.azure.com) and test the agent
+  - Navigate to your Microsoft Foundry (should be listed under resource group `rg-<username>-hosted-agent` you specified in step 1).
 
 ## Resource Clean-up
 
