@@ -61,7 +61,7 @@ cd hosted-agent-workshop
     ```
 
 5. Open Microsoft [Foundry portal](https://ai.azure.com) and test the agent
-  - Navigate to your Microsoft Foundry (should be listed under resource group `rg-<username>-hosted-agent` you specified in step 1).
+  - Note: azd up creates new Microsoft Foundry account. Navigate to your Microsoft Foundry (should be listed under resource group `rg-<username>-hosted-agent` you specified in step 1).
 
 ## Resource Clean-up
 
