@@ -45,7 +45,7 @@ cd hosted-agent-workshop
 3. Download a sample agent definition:
 
     ```shell
-    azd ai agent init -m ./msft-docs-agent/agent.yaml
+    azd ai agent init -m ../msft-docs-agent/agent.yaml
     ```
   - install agent extension if prompted.
   - select your subscription when prompted.
