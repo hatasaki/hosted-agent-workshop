@@ -30,7 +30,7 @@ cd hosted-agent-workshop
 1. Bring down the template code:
 
     ```shell
-    azd init --template Azure-Samples/ai-foundry-starter-basic
+    azd init -t https://github.com/Azure-Samples/azd-ai-starter-basic
     ```
     - input your unique project name when prompted. Ex. `<username>-hosted-agent`
 
