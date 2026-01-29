@@ -1,11 +1,11 @@
 import os
 from agent_framework import ChatAgent, MCPStreamableHTTPTool
-from agent_framework_azure_ai import AzureAIAgentClient
+from agent_framework.azure import AzureAIAgentClient
 from azure.ai.agentserver.agentframework import from_agent_framework
 from azure.identity import DefaultAzureCredential
 
 def get_agent():
-    """Create and return a ChatAgent with Bing Grounding search tool."""
+    """Create and return a ChatAgent with Microsoft Learn MCP tool."""
     assert "AZURE_AI_PROJECT_ENDPOINT" in os.environ, (
         "AZURE_AI_PROJECT_ENDPOINT environment variable must be set."
     )
@@ -13,18 +13,24 @@ def get_agent():
         "AZURE_AI_MODEL_DEPLOYMENT_NAME environment variable must be set."
     )
 
-    agent = AzureAIAgentClient(
+    chat_client = AzureAIAgentClient(
         endpoint=os.environ["AZURE_AI_PROJECT_ENDPOINT"],
         credential=DefaultAzureCredential(),
-    ).create_agent(
+    )
+    
+    agent = ChatAgent(
+        chat_client=chat_client,
         name="msft-learn-mcp-agent",
         instructions="You are a helpful assistant that can help with microsoft documentation questions.",
-        tools=MCPStreamableHTTPTool(
-            name="Microsoft Learn MCP",
-            url="https://learn.microsoft.com/api/mcp",
-        ),
+        tools=[
+            MCPStreamableHTTPTool(
+                name="Microsoft Learn MCP",
+                url="https://learn.microsoft.com/api/mcp",
+            )
+        ],
     )
     return agent
 
 if __name__ == "__main__":
-    from_agent_framework(lambda _: get_agent()).run()
+    agent = get_agent()
+    from_agent_framework(agent).run()
