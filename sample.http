@@ -1,0 +1,7 @@
+ 
+POST http://0.0.0.0:8088/responses http/1.1
+Content-Type: application/json
+
+{
+    "input": "Explain overview of Microsoft Foundry in Japanese?"
+}

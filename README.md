@@ -75,3 +75,77 @@ cd hosted-agent-workshop
     Please note that this process may take up to 20 minutes to complete.
 
 ⚠️ Alternatively, you can delete the resource group directly from the Azure Portal to clean up resources.
+
+## Run the agent in a local environment
+
+### Prerequisites
+
+* Install the [Azure CLI](https://learn.microsoft.com/cli/azure/install-azure-cli)
+  * Windows: `winget install --id Microsoft.AzureCLI`
+  * Linux: `curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash`
+  * MacOS: `brew update && brew install azure-cli`
+
+* You have already provisioned a Foundry project and deployed a model (for example by running `azd up`).
+
+* Your signed-in user has Azure RBAC access to the Foundry project (at minimum the `Azure AI User` role on the project).
+
+* Python 3.10+ is installed. Using a virtual environment (such as `venv`) is strongly recommended.
+  * Example (Linux/MacOS):
+    ```bash
+    python3 -m venv .venv
+    source .venv/bin/activate
+    ```
+  * Example (Windows PowerShell):
+    ```powershell
+    py -m venv .venv
+    .\.venv\Scripts\Activate.ps1
+    ```
+
+### Steps
+
+1. In a terminal, set the following environment variables using values from the Foundry portal (https://ai.azure.com):
+   * `AZURE_AI_PROJECT_ENDPOINT`
+   * `AZURE_AI_MODEL_DEPLOYMENT_NAME`
+
+   Example (Linux/MacOS):
+   ```bash
+   export AZURE_AI_PROJECT_ENDPOINT="<your-project-endpoint>"
+   export AZURE_AI_MODEL_DEPLOYMENT_NAME="<your-model-deployment-name>"
+   ```
+
+   Example (Windows PowerShell):
+   ```powershell
+   $env:AZURE_AI_PROJECT_ENDPOINT = "<your-project-endpoint>"
+   $env:AZURE_AI_MODEL_DEPLOYMENT_NAME = "<your-model-deployment-name>"
+   ```
+
+2. Sign in with Azure CLI and ensure you are using the tenant and subscription that contain your Foundry project:
+   ```bash
+   az login
+   ```
+   If needed, select a subscription:
+   ```bash
+   az account set --subscription "<subscription-id>"
+   ```
+
+3. Install dependencies:
+   ```bash
+   cd msft-docs-agent
+   python3 -m pip install -r requirements.txt
+   ```
+
+4. Run the agent locally:
+   ```bash
+   python3 main.py
+   ```
+   This starts a local server (see `sample.http` for the request format).
+
+5. Test the agent:
+   * Using VS Code REST Client: open `sample.http` and send the request.
+   * Or with `curl`:
+     ```bash
+     curl -sS http://0.0.0.0:8088/responses \
+       -H 'Content-Type: application/json' \
+       -d '{"input":"Explain overview of Microsoft Foundry in Japanese?"}'
+     ```
+
