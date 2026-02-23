@@ -49,7 +49,7 @@ cd hosted-agent-workshop
     ```
   - install agent extension if prompted.
   - select your subscription when prompted.
-  - select `North Central US` region.
+  - select supported region. ([List of supported regions](https://learn.microsoft.com/en-us/azure/ai-foundry/agents/concepts/hosted-agents?view=foundry#region-availability))
   - select `GlobalStandard` for mode SKU.
   - deployment name of model cab be left as default. (gpt-4o-mini)
   - container memory, CPU, and replicas can be left as default. (2GB, 1 CPU, 1 min replica and 3 max replicas)
@@ -148,5 +148,6 @@ cd hosted-agent-workshop
        -H 'Content-Type: application/json' \
        -d '{"input":"Explain overview of Microsoft Foundry in Japanese?"}'
      ```
+
 
 
