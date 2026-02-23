@@ -149,3 +149,77 @@ cd hosted-agent-workshop
        -d '{"input":"Explain overview of Microsoft Foundry in Japanese?"}'
      ```
 
+## Register a Hosted Agent to an Existing Foundry Project
+
+Use this approach if you already have a Microsoft Foundry account and project with a deployed model, and want to register `main.py` as a Hosted Agent without creating new Foundry resources.
+
+> **Note:** This uses `azd ai agent init --project-id` as an alternative to `azd init -t`, as documented in the [Azure Developer CLI AI agent extension docs](https://learn.microsoft.com/azure/developer/azure-developer-cli/extensions/azure-ai-foundry-extension).
+
+### Prerequisites
+
+* Install [azd](https://aka.ms/install-azd) (version 1.23.0 or later):
+  ```bash
+  azd version
+  ```
+
+* Install the `azd ai agent` extension (installed automatically when you first run `azd ai agent`):
+  ```bash
+  azd extension install azure.ai.agents
+  ```
+
+* Your existing Foundry project is in a region that supports Hosted Agents (e.g. North Central US, East US, West US 3, etc.).  
+  See [region availability](https://learn.microsoft.com/azure/ai-foundry/agents/concepts/hosted-agents?view=foundry#region-availability) for the full list.
+
+* Your Azure account has the required RBAC roles on the existing project:
+
+  | Scenario | Required roles |
+  | --- | --- |
+  | Missing resources (e.g. ACR) need to be created | **Azure AI Owner** on Foundry + **Contributor** on subscription |
+  | All required resources are already provisioned | **Reader** on account + **Azure AI User** on project |
+
+### Steps
+
+0. Create a new directory and navigate into it:
+
+    ```shell
+    mkdir my-hosted-agent
+    cd my-hosted-agent
+    ```
+
+1. Sign into your Azure account:
+
+    ```shell
+    azd auth login
+    ```
+
+2. Initialize the project pointing to your existing Foundry project (instead of `azd init -t ...`):
+
+    ```shell
+    azd ai agent init --project-id /subscriptions/<SUBSCRIPTION_ID>/resourceGroups/<RESOURCE_GROUP>/providers/Microsoft.CognitiveServices/accounts/<ACCOUNT_NAME>/projects/<PROJECT_NAME>
+    ```
+
+    - Replace `<SUBSCRIPTION_ID>`, `<RESOURCE_GROUP>`, `<ACCOUNT_NAME>`, and `<PROJECT_NAME>` with values from your existing Foundry project.
+    - This generates the local project structure (`infra/`, `azure.yaml`) configured to target your existing resources — no new Foundry account or project is created.
+
+3. Load the sample agent definition:
+
+    ```shell
+    azd ai agent init -m ../msft-docs-agent/agent.yaml
+    ```
+
+    - When prompted for the model deployment name, enter the name of your **already-deployed model** (e.g. `gpt-4o-mini`).
+    - Container memory, CPU, and replicas can be left as default (2 GB, 1 CPU, 1 min replica and 3 max replicas).
+
+4. Build and deploy the agent to your existing Foundry project:
+
+    ```shell
+    azd up
+    ```
+
+    `azd up` will:
+    - Provision **only missing** resources (e.g. Azure Container Registry) — your existing Foundry account, project, and model deployments are **not** recreated.
+    - Build the Docker image from `msft-docs-agent/` and push it to the Container Registry.
+    - Register and start the agent as a Hosted Agent in your existing Foundry project.
+
+5. Open the Microsoft [Foundry portal](https://ai.azure.com), navigate to your existing project, and verify the agent appears in the **Agents** section.
+
