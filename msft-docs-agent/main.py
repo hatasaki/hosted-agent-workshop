@@ -1,5 +1,5 @@
 import os
-from agent_framework import ChatAgent, MCPStreamableHTTPTool
+from agent_framework import MCPStreamableHTTPTool
 from agent_framework.azure import AzureAIAgentClient
 from azure.ai.agentserver.agentframework import from_agent_framework
 from azure.identity import DefaultAzureCredential
@@ -18,8 +18,7 @@ def get_agent():
         credential=DefaultAzureCredential(),
     )
     
-    agent = ChatAgent(
-        chat_client=chat_client,
+    agent = chat_client.create_agent(
         name="msft-learn-mcp-agent",
         instructions="You are a helpful assistant that can help with microsoft documentation questions.",
         tools=[
