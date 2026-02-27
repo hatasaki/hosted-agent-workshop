@@ -1,3 +1,2 @@
 azure-ai-agentserver-agentframework
-opentelemetry-semantic-conventions-ai==0.4.13
 azure-identity
